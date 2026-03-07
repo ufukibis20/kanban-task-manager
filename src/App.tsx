@@ -110,7 +110,10 @@ function App() {
         onDragOver={(event) => event.preventDefault()}
         onDrop={() => handleDrop(status)}
       >
-        <h2 className="column-title">{title}</h2>
+        <div className="column-header">
+          <h2 className="column-title">{title}</h2>
+          <span className="task-count">{filteredTasks.length}</span>
+        </div>
 
         {filteredTasks.length === 0 ? (
           <p className="empty-state">Noch keine Aufgaben in dieser Spalte.</p>
