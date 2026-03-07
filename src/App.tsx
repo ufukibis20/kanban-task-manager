@@ -28,6 +28,7 @@ function App() {
   });
 
   const [newTaskTitle, setNewTaskTitle] = useState("");
+  const [draggedTaskId, setDraggedTaskId] = useState<string | null>(null);
 
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
@@ -58,18 +59,45 @@ function App() {
     );
   };
 
+  const handleDragStart = (taskId: string) => {
+    setDraggedTaskId(taskId);
+  };
+
+  const handleDrop = (newStatus: Status) => {
+    if (!draggedTaskId) return;
+
+    updateTaskStatus(draggedTaskId, newStatus);
+    setDraggedTaskId(null);
+  };
+
+  const handleDragEnd = () => {
+    setDraggedTaskId(null);
+  };
+
   const renderColumn = (status: Status, title: string) => {
     const filteredTasks = tasks.filter((task) => task.status === status);
 
     return (
-      <div className="column">
+      <div
+        className="column"
+        onDragOver={(event) => event.preventDefault()}
+        onDrop={() => handleDrop(status)}
+      >
         <h2 className="column-title">{title}</h2>
 
         {filteredTasks.length === 0 ? (
           <p className="empty-state">Noch keine Aufgaben in dieser Spalte.</p>
         ) : (
           filteredTasks.map((task) => (
-            <div key={task.id} className="task-card">
+            <div
+              key={task.id}
+              className={`task-card ${
+                draggedTaskId === task.id ? "task-card-dragging" : ""
+              }`}
+              draggable
+              onDragStart={() => handleDragStart(task.id)}
+              onDragEnd={handleDragEnd}
+            >
               <span className="task-title">{task.title}</span>
 
               <select

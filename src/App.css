@@ -80,6 +80,11 @@ body {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  cursor: grab;
+}
+
+.task-card-dragging {
+  opacity: 0.5;
 }
 
 .task-title {
