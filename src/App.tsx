@@ -29,6 +29,8 @@ function App() {
 
   const [newTaskTitle, setNewTaskTitle] = useState("");
   const [draggedTaskId, setDraggedTaskId] = useState<string | null>(null);
+  const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
+  const [editedTaskTitle, setEditedTaskTitle] = useState("");
 
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
@@ -57,6 +59,31 @@ function App() {
         task.id === id ? { ...task, status: newStatus } : task
       )
     );
+  };
+
+  const startEditingTask = (task: Task) => {
+    setEditingTaskId(task.id);
+    setEditedTaskTitle(task.title);
+  };
+
+  const saveEditedTask = () => {
+    if (!editingTaskId || !editedTaskTitle.trim()) return;
+
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === editingTaskId
+          ? { ...task, title: editedTaskTitle.trim() }
+          : task
+      )
+    );
+
+    setEditingTaskId(null);
+    setEditedTaskTitle("");
+  };
+
+  const cancelEditingTask = () => {
+    setEditingTaskId(null);
+    setEditedTaskTitle("");
   };
 
   const handleDragStart = (taskId: string) => {
@@ -94,30 +121,69 @@ function App() {
               className={`task-card ${
                 draggedTaskId === task.id ? "task-card-dragging" : ""
               }`}
-              draggable
+              draggable={editingTaskId !== task.id}
               onDragStart={() => handleDragStart(task.id)}
               onDragEnd={handleDragEnd}
             >
-              <span className="task-title">{task.title}</span>
+              {editingTaskId === task.id ? (
+                <>
+                  <input
+                    className="task-edit-input"
+                    type="text"
+                    value={editedTaskTitle}
+                    onChange={(event) => setEditedTaskTitle(event.target.value)}
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter") {
+                        saveEditedTask();
+                      }
+                      if (event.key === "Escape") {
+                        cancelEditingTask();
+                      }
+                    }}
+                  />
 
-              <select
-                className="task-select"
-                value={task.status}
-                onChange={(event) =>
-                  updateTaskStatus(task.id, event.target.value as Status)
-                }
-              >
-                <option value="todo">Todo</option>
-                <option value="doing">Doing</option>
-                <option value="done">Done</option>
-              </select>
+                  <div className="task-actions">
+                    <button className="save-button" onClick={saveEditedTask}>
+                      Speichern
+                    </button>
+                    <button className="cancel-button" onClick={cancelEditingTask}>
+                      Abbrechen
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <span className="task-title">{task.title}</span>
 
-              <button
-                className="delete-button"
-                onClick={() => deleteTask(task.id)}
-              >
-                Löschen
-              </button>
+                  <select
+                    className="task-select"
+                    value={task.status}
+                    onChange={(event) =>
+                      updateTaskStatus(task.id, event.target.value as Status)
+                    }
+                  >
+                    <option value="todo">Todo</option>
+                    <option value="doing">Doing</option>
+                    <option value="done">Done</option>
+                  </select>
+
+                  <div className="task-actions">
+                    <button
+                      className="edit-button"
+                      onClick={() => startEditingTask(task)}
+                    >
+                      Bearbeiten
+                    </button>
+
+                    <button
+                      className="delete-button"
+                      onClick={() => deleteTask(task.id)}
+                    >
+                      Löschen
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
           ))
         )}
