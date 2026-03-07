@@ -31,6 +31,10 @@ function App() {
     setNewTaskTitle("");
   };
 
+  const deleteTask = (id: string) => {
+    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
+  };
+
   const renderColumn = (status: Status, title: string) => {
     return (
       <div style={{ width: "30%" }}>
@@ -46,9 +50,23 @@ function App() {
                 marginBottom: "10px",
                 background: "#f3f3f3",
                 borderRadius: "6px",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                gap: "10px",
               }}
             >
-              {task.title}
+              <span>{task.title}</span>
+
+              <button
+                onClick={() => deleteTask(task.id)}
+                style={{
+                  padding: "6px 10px",
+                  cursor: "pointer",
+                }}
+              >
+                Löschen
+              </button>
             </div>
           ))}
       </div>
