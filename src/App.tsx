@@ -35,9 +35,25 @@ function App() {
     setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
   };
 
+  const updateTaskStatus = (id: string, newStatus: Status) => {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === id ? { ...task, status: newStatus } : task
+      )
+    );
+  };
+
   const renderColumn = (status: Status, title: string) => {
     return (
-      <div style={{ width: "30%" }}>
+      <div
+        style={{
+          width: "30%",
+          background: "#fafafa",
+          padding: "16px",
+          borderRadius: "10px",
+          minHeight: "300px",
+        }}
+      >
         <h2>{title}</h2>
 
         {tasks
@@ -51,12 +67,25 @@ function App() {
                 background: "#f3f3f3",
                 borderRadius: "6px",
                 display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
+                flexDirection: "column",
                 gap: "10px",
               }}
             >
               <span>{task.title}</span>
+
+              <select
+                value={task.status}
+                onChange={(event) =>
+                  updateTaskStatus(task.id, event.target.value as Status)
+                }
+                style={{
+                  padding: "8px",
+                }}
+              >
+                <option value="todo">Todo</option>
+                <option value="doing">Doing</option>
+                <option value="done">Done</option>
+              </select>
 
               <button
                 onClick={() => deleteTask(task.id)}
@@ -100,7 +129,7 @@ function App() {
         </button>
       </div>
 
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", gap: "20px" }}>
         {renderColumn("todo", "Todo")}
         {renderColumn("doing", "Doing")}
         {renderColumn("done", "Done")}
