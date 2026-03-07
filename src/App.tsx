@@ -9,12 +9,27 @@ type Task = {
 };
 
 function App() {
-  const [tasks] = useState<Task[]>([
+  const [tasks, setTasks] = useState<Task[]>([
     { id: "1", title: "React Projekt starten", status: "todo" },
     { id: "2", title: "Kanban Board bauen", status: "doing" },
     { id: "3", title: "GitHub Repo erstellen", status: "done" },
-    { id: "4", title: "Portfolio vorbereiten", status: "todo" }
+    { id: "4", title: "Portfolio vorbereiten", status: "todo" },
   ]);
+
+  const [newTaskTitle, setNewTaskTitle] = useState("");
+
+  const addTask = () => {
+    if (!newTaskTitle.trim()) return;
+
+    const newTask: Task = {
+      id: crypto.randomUUID(),
+      title: newTaskTitle,
+      status: "todo",
+    };
+
+    setTasks((prevTasks) => [...prevTasks, newTask]);
+    setNewTaskTitle("");
+  };
 
   const renderColumn = (status: Status, title: string) => {
     return (
@@ -30,7 +45,7 @@ function App() {
                 padding: "10px",
                 marginBottom: "10px",
                 background: "#f3f3f3",
-                borderRadius: "6px"
+                borderRadius: "6px",
               }}
             >
               {task.title}
@@ -43,6 +58,29 @@ function App() {
   return (
     <div style={{ padding: "40px", fontFamily: "Arial" }}>
       <h1>Kanban Task Manager</h1>
+
+      <div style={{ marginBottom: "20px" }}>
+        <input
+          type="text"
+          placeholder="Neue Aufgabe eingeben"
+          value={newTaskTitle}
+          onChange={(event) => setNewTaskTitle(event.target.value)}
+          style={{
+            padding: "10px",
+            marginRight: "10px",
+            width: "300px",
+          }}
+        />
+        <button
+          onClick={addTask}
+          style={{
+            padding: "10px 16px",
+            cursor: "pointer",
+          }}
+        >
+          Aufgabe hinzufügen
+        </button>
+      </div>
 
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         {renderColumn("todo", "Todo")}
