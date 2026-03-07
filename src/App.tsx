@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type Status = "todo" | "doing" | "done";
 
@@ -8,15 +8,29 @@ type Task = {
   status: Status;
 };
 
+const defaultTasks: Task[] = [
+  { id: "1", title: "React Projekt starten", status: "todo" },
+  { id: "2", title: "Kanban Board bauen", status: "doing" },
+  { id: "3", title: "GitHub Repo erstellen", status: "done" },
+  { id: "4", title: "Portfolio vorbereiten", status: "todo" },
+];
+
 function App() {
-  const [tasks, setTasks] = useState<Task[]>([
-    { id: "1", title: "React Projekt starten", status: "todo" },
-    { id: "2", title: "Kanban Board bauen", status: "doing" },
-    { id: "3", title: "GitHub Repo erstellen", status: "done" },
-    { id: "4", title: "Portfolio vorbereiten", status: "todo" },
-  ]);
+  const [tasks, setTasks] = useState<Task[]>(() => {
+    const savedTasks = localStorage.getItem("tasks");
+
+    if (savedTasks) {
+      return JSON.parse(savedTasks);
+    }
+
+    return defaultTasks;
+  });
 
   const [newTaskTitle, setNewTaskTitle] = useState("");
+
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
 
   const addTask = () => {
     if (!newTaskTitle.trim()) return;
@@ -129,7 +143,9 @@ function App() {
         </button>
       </div>
 
-      <div style={{ display: "flex", justifyContent: "space-between", gap: "20px" }}>
+      <div
+        style={{ display: "flex", justifyContent: "space-between", gap: "20px" }}
+      >
         {renderColumn("todo", "Todo")}
         {renderColumn("doing", "Doing")}
         {renderColumn("done", "Done")}
