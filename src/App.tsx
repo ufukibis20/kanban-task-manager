@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import "./App.css";
 
 type Status = "todo" | "doing" | "done";
 
@@ -59,42 +60,21 @@ function App() {
 
   const renderColumn = (status: Status, title: string) => {
     return (
-      <div
-        style={{
-          width: "30%",
-          background: "#fafafa",
-          padding: "16px",
-          borderRadius: "10px",
-          minHeight: "300px",
-        }}
-      >
-        <h2>{title}</h2>
+      <div className="column">
+        <h2 className="column-title">{title}</h2>
 
         {tasks
           .filter((task) => task.status === status)
           .map((task) => (
-            <div
-              key={task.id}
-              style={{
-                padding: "10px",
-                marginBottom: "10px",
-                background: "#f3f3f3",
-                borderRadius: "6px",
-                display: "flex",
-                flexDirection: "column",
-                gap: "10px",
-              }}
-            >
-              <span>{task.title}</span>
+            <div key={task.id} className="task-card">
+              <span className="task-title">{task.title}</span>
 
               <select
+                className="task-select"
                 value={task.status}
                 onChange={(event) =>
                   updateTaskStatus(task.id, event.target.value as Status)
                 }
-                style={{
-                  padding: "8px",
-                }}
               >
                 <option value="todo">Todo</option>
                 <option value="doing">Doing</option>
@@ -102,11 +82,8 @@ function App() {
               </select>
 
               <button
+                className="delete-button"
                 onClick={() => deleteTask(task.id)}
-                style={{
-                  padding: "6px 10px",
-                  cursor: "pointer",
-                }}
               >
                 Löschen
               </button>
@@ -117,35 +94,23 @@ function App() {
   };
 
   return (
-    <div style={{ padding: "40px", fontFamily: "Arial" }}>
-      <h1>Kanban Task Manager</h1>
+    <div className="app">
+      <h1 className="app-title">Kanban Task Manager</h1>
 
-      <div style={{ marginBottom: "20px" }}>
+      <div className="task-form">
         <input
+          className="task-input"
           type="text"
           placeholder="Neue Aufgabe eingeben"
           value={newTaskTitle}
           onChange={(event) => setNewTaskTitle(event.target.value)}
-          style={{
-            padding: "10px",
-            marginRight: "10px",
-            width: "300px",
-          }}
         />
-        <button
-          onClick={addTask}
-          style={{
-            padding: "10px 16px",
-            cursor: "pointer",
-          }}
-        >
+        <button className="add-button" onClick={addTask}>
           Aufgabe hinzufügen
         </button>
       </div>
 
-      <div
-        style={{ display: "flex", justifyContent: "space-between", gap: "20px" }}
-      >
+      <div className="board">
         {renderColumn("todo", "Todo")}
         {renderColumn("doing", "Doing")}
         {renderColumn("done", "Done")}
