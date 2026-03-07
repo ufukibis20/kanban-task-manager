@@ -178,3 +178,49 @@ body {
   font-size: 14px;
   font-weight: 600;
 }
+
+@media (max-width: 900px) {
+  .board {
+    flex-direction: column;
+  }
+
+  .column {
+    width: 100%;
+    box-sizing: border-box;
+    min-height: auto;
+  }
+}
+
+@media (max-width: 600px) {
+  .app {
+    padding: 20px;
+  }
+
+  .app-title {
+    font-size: 26px;
+  }
+
+  .task-form {
+    flex-direction: column;
+  }
+
+  .task-input {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .add-button {
+    width: 100%;
+  }
+
+  .task-actions {
+    flex-direction: column;
+  }
+
+  .edit-button,
+  .save-button,
+  .cancel-button,
+  .delete-button {
+    width: 100%;
+  }
+}
