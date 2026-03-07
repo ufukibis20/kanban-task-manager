@@ -38,7 +38,7 @@ function App() {
 
     const newTask: Task = {
       id: crypto.randomUUID(),
-      title: newTaskTitle,
+      title: newTaskTitle.trim(),
       status: "todo",
     };
 
@@ -59,13 +59,16 @@ function App() {
   };
 
   const renderColumn = (status: Status, title: string) => {
+    const filteredTasks = tasks.filter((task) => task.status === status);
+
     return (
       <div className="column">
         <h2 className="column-title">{title}</h2>
 
-        {tasks
-          .filter((task) => task.status === status)
-          .map((task) => (
+        {filteredTasks.length === 0 ? (
+          <p className="empty-state">Noch keine Aufgaben in dieser Spalte.</p>
+        ) : (
+          filteredTasks.map((task) => (
             <div key={task.id} className="task-card">
               <span className="task-title">{task.title}</span>
 
@@ -88,7 +91,8 @@ function App() {
                 Löschen
               </button>
             </div>
-          ))}
+          ))
+        )}
       </div>
     );
   };
@@ -104,6 +108,11 @@ function App() {
           placeholder="Neue Aufgabe eingeben"
           value={newTaskTitle}
           onChange={(event) => setNewTaskTitle(event.target.value)}
+          onKeyDown={(event) => {
+            if (event.key === "Enter") {
+              addTask();
+            }
+          }}
         />
         <button className="add-button" onClick={addTask}>
           Aufgabe hinzufügen
