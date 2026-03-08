@@ -4,7 +4,7 @@ A modern Kanban task management app built with React and TypeScript.
 
 ## Live Demo
 
-[Open the live app](https://vercel.com/ufo401s-projects/kanban-task-manager)
+[Open the live app](https://kanban-task-manager-rho-orpin.vercel.app)
 
 ## Screenshot
 
