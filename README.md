@@ -73,4 +73,4 @@ This project was built to strengthen practical frontend development skills in:
 ## Author
 
 Ufuk Ibis  
-GitHub: https://github.com/ufo401
+GitHub: https://github.com/ufukibis20
