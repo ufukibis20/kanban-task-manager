@@ -8,7 +8,7 @@ A modern Kanban task management app built with React and TypeScript.
 
 ## Screenshot
 
-![Kanban Task Manager Screenshot](./kanban-screenshot.png)
+![Screenshot of the Kanban Task Manager](./kanban-screenshot.png)
 
 ## Overview
 
